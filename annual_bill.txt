@@ -1,0 +1,14 @@
+--- Annual Cost Breakdown ---
+Course Fee: 200000
+Analytics Fee: 20000.0
+Hostel Fee: 200000
+Food Fee: 16000
+Transportation Fee: 13000
+Total Annual Cost: 449000.0
+--- Annual Cost Breakdown ---
+Course Fee: 200000
+Analytics Fee: 0
+Hostel Fee: 200000
+Food Fee: 10000
+Transportation Fee: 13000
+Total Annual Cost: 423000
