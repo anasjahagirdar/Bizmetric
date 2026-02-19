@@ -20,10 +20,9 @@ def get_user_input():
 name, subject, analytics, hostel, food_months, transport = get_user_input()
 
 
-# Step 2: Base course fee
 course_fee = 200000
 
-# Step 3: Analytics fee
+
 def analytics_cost(subject, analytics, course_fee):
     if analytics == "Y":
         if subject != "DS":
@@ -35,7 +34,7 @@ def analytics_cost(subject, analytics, course_fee):
 analytics_fee = analytics_cost(subject, analytics, course_fee)
 
 
-# Step 4: Hostel fee
+
 def hostel_cost(hostel):
     if hostel == "Y":
         return 200000
@@ -43,13 +42,12 @@ def hostel_cost(hostel):
 hostel_fee = hostel_cost(hostel)
 
 
-# Step 5: Food fee
+
 def food_cost(months):
     return months * 2000
 
 food_fee = food_cost(food_months)
 
-# Step 6: Transportation fee
 def transport_cost(transport):
     if transport == "semester":
         return 13000
@@ -60,7 +58,6 @@ def transport_cost(transport):
     
 transport_fee = transport_cost(transport)
 
-# Step 7: Total cost
 total_cost = (
     course_fee +
     analytics_fee +
@@ -69,7 +66,6 @@ total_cost = (
     transport_fee
 )
 
-# Step 8: Save bill to txt file
 def save_bill(name,course_fee, analytics_fee, hostel_fee, food_fee, transport_fee, total):
     with open("annual_bill.txt", "a") as f:
         f.write("\n========================================================\n")
