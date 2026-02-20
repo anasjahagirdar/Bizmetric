@@ -1,0 +1,10 @@
+
+========================================================
+--- Annual Cost Of your College is ----
+Student Name: Amaan Shaikh
+Course Fee: 200000
+Analytics Fee: 0
+Hostel Fee: 0
+Food Fee: 0
+Transportation Fee: 0
+Total Annual Cost: 200000

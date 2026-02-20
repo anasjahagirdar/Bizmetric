@@ -19,3 +19,13 @@ Hostel Fee: 200000
 Food Fee: 12000
 Transportation Fee: 13000
 Total Annual Cost: 445000.0
+
+========================================================
+--- Annual Cost Breakdown ---
+Student Name: Sudip
+Course Fee: 200000
+Analytics Fee: 20000.0
+Hostel Fee: 200000
+Food Fee: 0
+Transportation Fee: 13000
+Total Annual Cost: 433000.0
