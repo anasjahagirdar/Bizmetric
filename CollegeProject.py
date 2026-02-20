@@ -1,112 +1,127 @@
 import pyodbc
-
-def get_user_input():
-    name = input("Enter student name: ").strip()
-    subject = input("Enter subject (HR / Finance / Marketing / DS): ").strip()
-    analytics = input("Do you want Analytics? Press (Y/N): ").strip().upper()
-    hostel = input("Do you want Hostel? Press (Y/N): ").strip().upper()
-
-    if hostel == "Y":
-        try:
-            food_months = int(input("Enter number of food for months (0 if no food): "))
-            if food_months < 0:
-                food_months = 0
-        except ValueError:
-            food_months = 0
-        transport = input("Transportation as per your (Semester/Annual): ").strip().lower()
-    else:
-        food_months = 0
-        transport = "none"
-    return name, subject, analytics, hostel, food_months, transport
-
-name, subject, analytics, hostel, food_months, transport = get_user_input()
-
-conn = pyodbc.connect(
-    'DRIVER={SQL Server};'
-    'SERVER=LAPTOP-NUB4LAN9\SQLEXPRESS;'
-    'DATABASE=College_Project_DB;'
-    'Trusted_Connection=yes;'
-)
-cursor = conn.cursor()
-
-#########################################################################################################################################
-course_fee = 200000
-
-
-def analytics_cost(subject, analytics, course_fee):
-    if analytics == "Y":
-        if subject != "DS":
-            return course_fee * 0.10
-        else:
-            print("Analytics not available for DS")
-            return 0
-    return 0
-analytics_fee = analytics_cost(subject, analytics, course_fee)
-
-
-
-def hostel_cost(hostel):
-    if hostel == "Y":
-        return 200000
-    return 0
-hostel_fee = hostel_cost(hostel)
-
-
-
-def food_cost(months):
-    return months * 2000
-
-food_fee = food_cost(food_months)
-
-
-def transport_cost(transport):
-    if transport == "semester":
-        return 13000
-    elif transport == "annual":
-        return 26000
-    else:
-        return 0
-    
-transport_fee = transport_cost(transport)
-
-
-total_cost = (
-    course_fee +
-    analytics_fee +
-    hostel_fee +
-    food_fee +
-    transport_fee
-)
-
-
 import os
 
-def save_bill(name,course_fee, analytics_fee, hostel_fee, food_fee, transport_fee, total):
-    filename = f"{name}_bill.txt" 
-    folder = os.path.dirname(os.path.abspath(__file__))
-    filepath = os.path.join(folder, filename)
+# Using the as maam asked Decorator
+def log(func):
+    def wrapper(self, *args, **kwargs):
+        print("\nCalculating bill...")
+        result = func(self, *args, **kwargs)
+        print("Calculation finished!\n")
+        return result
+    return wrapper
 
-    with open(filepath, "w") as f:
-        f.write("\n========================================================\n")
-        f.write("--- Annual Cost Of your College is ----\n")
-        f.write("Student Name: " + name + "\n")
-        f.write("Course Fee: " + str(course_fee) + "\n")
-        f.write("Analytics Fee: " + str(analytics_fee) + "\n")
-        f.write("Hostel Fee: " + str(hostel_fee) + "\n")
-        f.write("Food Fee: " + str(food_fee) + "\n")
-        f.write("Transportation Fee: " + str(transport_fee) + "\n")
-        f.write("Total Annual Cost: " + str(total) + "\n")
+class StudentBill:
+    def __init__(self):
+        self.course_fee = 200000
+    def get_user_input(self):
+        name = input("Enter student name : ").strip()
+        subject = input("Enter subject you want (HR / Finance / Marketing / DS) : ").strip()
+        analytics = input("Do you want Analytics as an extra add on ? Press (Y/N) : ").strip().upper()
+        hostel = input("Do you want to stay in Hostel ? Press (Y/N) : ").strip().upper()
 
-    print("Bill saved:", filepath)
+        if hostel == "Y":
+            try:
+                food_months = int(input("Enter number of food months (0 if no food): "))
+                if food_months < 0:
+                    food_months = 0
+            except ValueError:
+                food_months = 0
+            transport = input("Transportation (Semester/Annual): ").strip().lower()
+        else:
+            food_months = 0
+            transport = "none"
 
+        self.name = name
+        self.subject = subject
+        self.analytics = analytics
+        self.hostel = hostel
+        self.food_months = food_months
+        self.transport = transport
 
-cursor.execute("""
-INSERT INTO student_bill
-(name, subject, analytics, hostel, food_months, transport, total_fee)
-VALUES (?, ?, ?, ?, ?, ?, ?)
-""", name, subject, analytics, hostel, food_months, transport, total_cost)
+    def analytics_cost(self):
+        if self.analytics == "Y":
+            if self.subject != "DS":
+                return self.course_fee * 0.10
+            else:
+                print("Analytics not available for DS")
+        return 0
 
-conn.commit()
-print("Saved to database successfully!")
+    def hostel_cost(self):
+        if self.hostel == "Y":
+            return 200000
+        return 0
 
-save_bill(name, course_fee, analytics_fee, hostel_fee, food_fee, transport_fee, total_cost) 
+    def food_cost(self):
+        return self.food_months * 2000
+
+    def transport_cost(self):
+        if self.transport == "semester":
+            return 13000
+        elif self.transport == "annual":
+            return 26000
+        return 0
+
+    @log
+    def calculate_total(self):
+
+        self.analytics_fee = self.analytics_cost()
+        self.hostel_fee = self.hostel_cost()
+        self.food_fee = self.food_cost()
+        self.transport_fee = self.transport_cost()
+        self.total = (
+            self.course_fee +
+            self.analytics_fee +
+            self.hostel_fee +
+            self.food_fee +
+            self.transport_fee
+        )
+
+    def save_bill(self):
+        filename = f"{self.name}_bill.txt"
+        folder = os.path.dirname(os.path.abspath(__file__))
+        filepath = os.path.join(folder, filename)
+
+        with open(filepath, "w") as f:
+            f.write("\n========================================================\n")
+            f.write("--- Annual Cost Of your College is ----\n")
+            f.write("Student Name: " + self.name + "\n")
+            f.write("Course Fee: " + str(self.course_fee) + "\n")
+            f.write("Analytics Fee: " + str(self.analytics_fee) + "\n")
+            f.write("Hostel Fee: " + str(self.hostel_fee) + "\n")
+            f.write("Food Fee: " + str(self.food_fee) + "\n")
+            f.write("Transportation Fee: " + str(self.transport_fee) + "\n")
+            f.write("Total Annual Cost: " + str(self.total) + "\n")
+
+        print("Bill saved:", filepath)
+
+    def save_to_database(self):
+        conn = pyodbc.connect(
+            r'DRIVER={SQL Server};'
+            r'SERVER=LAPTOP-NUB4LAN9\SQLEXPRESS;'
+            r'DATABASE=College_Project_DB;'
+            r'Trusted_Connection=yes;'
+        )
+
+        cursor = conn.cursor()
+        cursor.execute("""
+        INSERT INTO student_bill
+        (name, subject, analytics, hostel, food_months, transport, total_fee)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+        """,
+        self.name,
+        self.subject,
+        self.analytics,
+        self.hostel,
+        self.food_months,
+        self.transport,
+        self.total
+        )
+        conn.commit()
+        conn.close()
+        print("Saved to database successfully!")
+
+student = StudentBill()
+student.get_user_input()
+student.calculate_total()
+student.save_to_database()
+student.save_bill()
