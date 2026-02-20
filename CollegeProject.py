@@ -1,7 +1,7 @@
 import pyodbc
 import os
 
-# Using the as maam asked Decorator
+# Using the Decorator as maam asked 
 def log(func):
     def wrapper(self, *args, **kwargs):
         print("\nCalculating bill...")
