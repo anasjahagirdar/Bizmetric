@@ -1,6 +1,7 @@
 ======= HOTEL BILL =======
-Customer: Anas Jahagirdar
+Customer: Anas
 -------------------------
-Idli              2   80
+Misalpav          4   360
+Dosa              3   210
 -------------------------
-TOTAL = 80
+TOTAL = 570
