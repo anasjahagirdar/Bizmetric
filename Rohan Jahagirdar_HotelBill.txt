@@ -1,0 +1,8 @@
+======= HOTEL BILL =======
+Customer: Rohan Jahagirdar
+-------------------------
+Vadapav           6   150
+Misalpav          2   180
+Chai              3   30
+-------------------------
+TOTAL = 360

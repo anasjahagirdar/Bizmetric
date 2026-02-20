@@ -1,0 +1,6 @@
+======= HOTEL BILL =======
+Customer: Anas Jahagirdar
+-------------------------
+Idli              2   80
+-------------------------
+TOTAL = 80
